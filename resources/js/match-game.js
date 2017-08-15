@@ -39,8 +39,38 @@ var randomCards = [];
   object.
 */
 
-MatchGame.renderCards = function(cardValues, $game) {
+MatchGame.renderCards = function(randomCards, $game) {
+    var colors = [
+        'hsl(25, 85%, 65%)',
+        'hsl(55, 85%, 65%)',
+        'hsl(90, 85%, 65%)',
+        'hsl(160, 85%, 65%)',
+        'hsl(220, 85%, 65%)',
+        'hsl(265, 85%, 65%)',
+        'hsl(310, 85%, 65%)',
+        'hsl(360, 85%, 65%)'];
 
+    $game.empty();
+    $game.data('flippedCards', []);
+
+    for (var vIndex = 0; vIndex < randomCards.length; vIndex++) {
+        var value = randomCards[vIndex];
+        var color = colors[value - 1];
+        var data = {
+            value: value,
+            color: color,
+            isFlipped: false
+        };
+
+        var $cards = $('<div class="col-xs-3 card"></div>');
+        $cards.data(data);
+
+        $game.append($cards);
+    }
+
+    $('.card').click(function() {
+        MatchGame.flipCard($(this), $('#game'));
+    });
 };
 
 /*
