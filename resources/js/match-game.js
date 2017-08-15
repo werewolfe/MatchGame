@@ -69,7 +69,7 @@ MatchGame.renderCards = function(randomCards, $game) {
     }
 
     $('.card').click(function() {
-        MatchGame.flipCard($(this), $('#game'));
+      MatchGame.flipCard($(this), $('#game'));
     });
 };
 
@@ -78,6 +78,38 @@ MatchGame.renderCards = function(randomCards, $game) {
   Updates styles on flipped cards depending whether they are a match or not.
  */
 
-MatchGame.flipCard = function($card, $game) {
+MatchGame.flipCard = function($cards, $game) {
+    if ($cards.data('isFlipped')) {
+        return;
+    }
 
+    $cards.css('background-color', $cards.data('color'))
+        .text($cards.data('value'))
+        .data('isFlipped', true);
+
+    var flippedCards = $game.data('flippedCards');
+    flippedCards.push($cards);
+
+    if (flippedCards.length === 2) {
+        if (flippedCards[0].data('value') === flippedCards[1].data('value')) {
+            var matchCss = {
+                backgroundColor: 'rgb(153, 153, 153)',
+                color: 'rgb(204, 204, 204)'
+            };
+            flippedCards[0].css(matchCss);
+            flippedCards[1].css(matchCss);
+        } else {
+            var card1 = flippedCards[0];
+            var card2 = flippedCards[1];
+            window.setTimeout(function() {
+                card1.css('background-color', 'rgb(32, 64, 86)')
+                    .text('')
+                    .data('isFlipped', false);
+                card2.css('background-color', 'rgb(32, 64, 86)')
+                    .text('')
+                    .data('isFlipped', false);
+            }, 400);
+        }
+        $game.data('flippedCards', []);
+    }
 };
